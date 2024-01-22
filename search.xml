@@ -4,25 +4,6 @@
   
     
     <entry>
-      <title>广东信息学冬令营匹配</title>
-      <link href="/2024/01/22/GDKOI2024S%E5%8C%B9%E9%85%8D/"/>
-      <url>/2024/01/22/GDKOI2024S%E5%8C%B9%E9%85%8D/</url>
-      
-        <content type="html"><![CDATA[<p><a href="https://www.luogu.com.cn/problem/P10080">题目传送门</a></p><h2 id="思路">思路</h2><p>首先我们先找一个最大匹配，如果有点无法匹配那么答案显然是 $-1$。</p><p>接着我们统计最大匹配中黑边的出现次数，若为偶数，直接输出，否则考虑调整。</p><p>若本来的匹配是 $(1,5),(2,6),(3,4)$，现在我们要将匹配转化成 $(1,4),(2,5),(3,6)$，那么考虑按如下方式连边：</p><p><img src="https://cdn.luogu.com.cn/upload/image_hosting/b877b0fe.png" alt=""></p><p>不难发现此时连成了一个环。</p><p>也就是说，如果我们按照“所有在最大匹配里的边左部点连到右部点，不在最大匹配里的边右部点连到左部点”的方式建出有向图，那么这张图上的环与调整方案一一对应。</p><p>同时，我们给每条边赋上颜色，边的颜色为这条边原先对应的那条无向边的颜色。</p><p>那么只要这张图存在一个奇环（出现了奇数次黑边的环），那么调整环上的匹配方案即可令答案合法。</p><p>暴力找环即可，时间复杂度 $\mathcal O(nm)$。</p><h2 id="代码">代码</h2><pre><code class="language-cpp">//A tree without skin will surely die.//A man without face is invincible.#include&lt;bits/stdc++.h&gt;using namespace std;#define rep(i,j,k) for(int i=j;i&lt;=k;++i)#define per(i,j,k) for(int i=j;i&gt;=k;--i)int const N=1e3+10;int n,m,vis[N],dep[N],pre[N],matched[N],b[N][N],id[N][N];vector&lt;int&gt;a[N];vector&lt; pair&lt;int,int&gt; &gt;c[N];inline bool Hungary(int x,int co)&#123;for (auto v:a[x])&#123;if (vis[v]==co) continue;vis[v]=co;if (!matched[v] || Hungary(matched[v],co)) return matched[v]=x,1;&#125;return 0;&#125;inline void dfs(int x)&#123;vis[x]=1;for (auto i:c[x])&#123;int v=i.first,w=i.second;if (!vis[v]) dep[v]=dep[x]+w,pre[v]=x,dfs(v);&#125;&#125;void solve()&#123;cin&gt;&gt;n&gt;&gt;m;rep(i,1,2*n) a[i].clear(),matched[i]=vis[i]=0;rep(i,1,2*n) rep(j,1,2*n) b[i][j]=-1;rep(i,1,m)&#123;int u,v,c;cin&gt;&gt;u&gt;&gt;v&gt;&gt;c;a[u].push_back(v);b[u][v]=b[v][u]=c;id[u][v]=id[v][u]=i;&#125;rep(i,1,n)if (!Hungary(i,i)) return cout&lt;&lt;&quot;-1\n&quot;,void();int w=0;rep(i,n+1,2*n) w+=b[i][matched[i]];if (!(w&amp;1))&#123;rep(i,n+1,2*n) cout&lt;&lt;id[i][matched[i]]&lt;&lt;' ';cout&lt;&lt;'\n';return;&#125;rep(i,1,2*n) c[i].clear();rep(i,n+1,n+n) c[matched[i]].push_back(&#123;i,b[i][matched[i]]&#125;);rep(i,n+1,n+n) rep(j,1,n)if (j!=matched[i] &amp;&amp; b[i][j]!=-1) c[i].push_back(&#123;j,b[i][j]&#125;);rep(i,1,n)&#123;rep(j,1,n+n) vis[j]=dep[j]=pre[j]=0;int tag=0;dfs(i);rep(x,1,n+n)for (auto s:c[x])&#123;int v=s.first,w=s.second;if (v!=i) continue;if (!vis[x]) continue;if ((dep[x]-dep[v]+w)&amp;1)&#123;tag=x;break;&#125;&#125;if (tag)&#123;for (int nw=tag;nw!=i;nw=pre[nw])&#123;int k=pre[nw];if (k&gt;n) matched[k]=nw;&#125;if (tag&gt;n) matched[tag]=i;rep(i,n+1,2*n) cout&lt;&lt;id[i][matched[i]]&lt;&lt;' ';cout&lt;&lt;'\n';return;&#125;&#125;cout&lt;&lt;&quot;-1\n&quot;;&#125;signed main()&#123;ios::sync_with_stdio(false);cin.tie(0),cout.tie(0);int t=1;cin&gt;&gt;t;while (t--) solve();return 0;&#125;</code></pre>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 题解 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>CSP2023 游记</title>
       <link href="/2024/01/21/CSP2023%E6%B8%B8%E8%AE%B0/"/>
       <url>/2024/01/21/CSP2023%E6%B8%B8%E8%AE%B0/</url>
